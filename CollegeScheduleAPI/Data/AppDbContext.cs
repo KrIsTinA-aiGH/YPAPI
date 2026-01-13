@@ -25,7 +25,6 @@ namespace CollegeSchedule.Data
             modelBuilder.Entity<Schedule>()
                 .HasIndex(s => new { s.LessonDate, s.LessonTimeId, s.GroupId, s.GroupPart })
                 .IsUnique();
-
             modelBuilder.Entity<Schedule>()
                 .HasIndex(s => new { s.LessonDate, s.LessonTimeId, s.ClassroomId })
                 .IsUnique();

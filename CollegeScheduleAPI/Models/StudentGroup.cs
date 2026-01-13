@@ -9,18 +9,13 @@ namespace CollegeSchedule.Models
         [Key]
         [Column("group_id")]
         public int GroupId { get; set; }
-
         [Column("group_name")]
         [Required]
         public string GroupName { get; set; } = null!;
-
         [Column("course")]
-        public int Course { get; set; } // Курс (1-6)
-
+        public int Course { get; set; }
         [Column("specialty_id")]
         public int SpecialtyId { get; set; }
-
-        // Внешний ключ к Specialty
         [ForeignKey("SpecialtyId")]
         public Specialty Specialty { get; set; } = null!;
     }

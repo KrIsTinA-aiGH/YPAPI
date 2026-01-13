@@ -9,13 +9,10 @@ namespace CollegeSchedule.Models
         [Key]
         [Column("lesson_time_id")]
         public int LessonTimeId { get; set; }
-
         [Column("lesson_number")]
-        public int LessonNumber { get; set; } // 1, 2, 3, 4
-
+        public int LessonNumber { get; set; }
         [Column("time_start")]
-        public TimeOnly TimeStart { get; set; } // Тип TimeOnly для времени
-
+        public TimeOnly TimeStart { get; set; }
         [Column("time_end")]
         public TimeOnly TimeEnd { get; set; }
     }
