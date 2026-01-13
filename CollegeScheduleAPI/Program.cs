@@ -1,4 +1,5 @@
 using CollegeSchedule.Data;
+using CollegeSchedule.Middlewares;
 using CollegeSchedule.Services;
 using Microsoft.EntityFrameworkCore;
 
@@ -36,7 +37,7 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
-
+app.UseMiddleware<ExceptionMiddleware>();
 // 8. Настраиваем маршрутизацию
 app.UseRouting();
 app.MapControllers();
