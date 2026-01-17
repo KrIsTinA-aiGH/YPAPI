@@ -28,17 +28,17 @@ builder.Services.AddControllers();
 // 6. Добавляем Swagger (это важно!)
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
-
 var app = builder.Build();
 
-// 7. Включаем Swagger в режиме разработки
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
     app.UseSwaggerUI();
 }
+
+// Middleware ДО маршрутизации
 app.UseMiddleware<ExceptionMiddleware>();
-// 8. Настраиваем маршрутизацию
+
 app.UseRouting();
 app.MapControllers();
 
