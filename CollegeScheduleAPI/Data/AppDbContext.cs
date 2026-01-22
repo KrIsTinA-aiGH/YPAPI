@@ -5,8 +5,10 @@ namespace CollegeSchedule.Data
 {
     public class AppDbContext : DbContext
     {
+        //конструктор для передачи настроек контекста
         public AppDbContext(DbContextOptions<AppDbContext> options) : base(options) { }
 
+        //DbSet - представляют таблицы в базе данных
         public DbSet<Building> Buildings => Set<Building>();
         public DbSet<Classroom> Classrooms => Set<Classroom>();
         public DbSet<Teacher> Teachers => Set<Teacher>();
@@ -21,15 +23,18 @@ namespace CollegeSchedule.Data
         {
             base.OnModelCreating(modelBuilder);
 
-            // Индексы для Schedule
+            //создаем уникальный индекс для проверки конфликтов в расписании
+            //проверяет, чтобы в одно время у одной группы не было двух занятий
             modelBuilder.Entity<Schedule>()
                 .HasIndex(s => new { s.LessonDate, s.LessonTimeId, s.GroupId, s.GroupPart })
                 .IsUnique();
+
+            //уникальный индекс для проверки занятости аудитории
             modelBuilder.Entity<Schedule>()
                 .HasIndex(s => new { s.LessonDate, s.LessonTimeId, s.ClassroomId })
                 .IsUnique();
 
-            // Конвертация enum в string
+            //настраиваем конвертацию enum GroupPart в строку для хранения в БД
             modelBuilder.Entity<Schedule>()
                 .Property(s => s.GroupPart)
                 .HasConversion<string>();

@@ -5,41 +5,45 @@ using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// 1. Загружаем настройки БД
+//загружаем настройки базы данных из файла .env
 DotNetEnv.Env.Load();
 
-// 2. Строка подключения к PostgreSQL
+//собираем строку подключения к PostgreSQL из переменных окружения
 var connectionString = $"Host={Environment.GetEnvironmentVariable("DB_HOST")};" +
     $"Port={Environment.GetEnvironmentVariable("DB_PORT")};" +
     $"Database={Environment.GetEnvironmentVariable("DB_NAME")};" +
     $"Username={Environment.GetEnvironmentVariable("DB_USER")};" +
     $"Password={Environment.GetEnvironmentVariable("DB_PASSWORD")}";
 
-// 3. Подключаем БД
+//настраиваем подключение к базе данных через Entity Framework
 builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseNpgsql(connectionString));
 
-// 4. Регистрируем сервис
+//регистрируем сервис расписания для dependency injection
 builder.Services.AddScoped<IScheduleService, ScheduleService>();
 
-// 5. Добавляем контроллеры
+//добавляем поддержку контроллеров (API endpoints)
 builder.Services.AddControllers();
 
-// 6. Добавляем Swagger (это важно!)
+//добавляем Swagger для документации и тестирования API
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+
 var app = builder.Build();
 
+//в режиме разработки включаем Swagger UI
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
     app.UseSwaggerUI();
 }
 
-// Middleware ДО маршрутизации
+//добавляем middleware для обработки исключений (до маршрутизации)
 app.UseMiddleware<ExceptionMiddleware>();
 
 app.UseRouting();
+
+//настраиваем маршрутизацию к контроллерам
 app.MapControllers();
 
 app.Run();
